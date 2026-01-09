@@ -24,7 +24,7 @@ type MonthlyStats = {
 export function Finance() {
   const [activeTab, setActiveTab] = useState<'daily' | 'monthly'>('daily');
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [loading, setLoading] = useState(true);
+
   const [selectedMonth, setSelectedMonth] = useState(new Date());
   
   // Dashboard Stats
@@ -45,7 +45,6 @@ export function Finance() {
   }, [activeTab, selectedMonth]);
 
   const fetchDailyTransactions = async () => {
-    setLoading(true);
     try {
       // Fetch pure financial transactions (Expenses/Misc Income)
       const { data: trxData, error: trxError } = await supabase
@@ -65,13 +64,10 @@ export function Finance() {
     } catch (error) {
       console.error('Error fetching transactions:', error);
       toast.error('Erro ao carregar movimentações');
-    } finally {
-      setLoading(false);
-    }
+
   };
 
   const fetchMonthlyStats = async () => {
-    setLoading(true);
     const start = startOfMonth(selectedMonth).toISOString();
     const end = endOfMonth(selectedMonth).toISOString();
 
@@ -139,8 +135,6 @@ export function Finance() {
     } catch (error) {
       console.error('Error calculating stats:', error);
       toast.error('Erro ao calcular resumo');
-    } finally {
-      setLoading(false);
     }
   };
 
