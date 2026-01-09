@@ -8,9 +8,7 @@ import { format } from 'date-fns';
 
 type Order = Database['public']['Tables']['orders']['Row'] & {
   customers: Database['public']['Tables']['customers']['Row'] | null;
-  order_items: (Database['public']['Tables']['order_items']['Row'] & {
-    products: Database['public']['Tables']['products']['Row'] | null;
-  })[];
+  order_items: Database['public']['Tables']['order_items']['Row'][];
   is_internal_transfer: boolean;
 };
 
@@ -33,10 +31,7 @@ export function OrderDetails() {
         .select(`
           *,
           customers (*),
-          order_items (
-            *,
-            products (*)
-          )
+          order_items (*)
         `)
         .eq('id', orderId)
         .single();
@@ -180,8 +175,8 @@ export function OrderDetails() {
                             {item.quantity}
                         </div>
                         <div className={`${productionMode ? 'col-span-11' : 'col-span-7'} p-3 border-r border-gray-100 print:border-gray-400`}>
-                            <div className="font-bold uppercase mb-1 text-gray-900">{item.products?.name}</div>
-                            {item.description && item.description !== item.products?.name && (
+                            <div className="font-bold uppercase mb-1 text-gray-900">{item.product_name}</div>
+                            {item.description && item.description !== item.product_name && (
                                 <div className="text-gray-500 whitespace-pre-wrap uppercase print:text-black font-medium text-xs">{item.description}</div>
                             )}
                         </div>
