@@ -65,6 +65,7 @@ export function Finance() {
       console.error('Error fetching transactions:', error);
       toast.error('Erro ao carregar movimentações');
 
+    }
   };
 
   const fetchMonthlyStats = async () => {
